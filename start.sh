@@ -11,10 +11,9 @@ echo 'net.ipv6.conf.all.forwarding = 1' | tee -a /etc/sysctl.conf
 sysctl -p /etc/sysctl.conf
 
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-ip6tables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+# ip6tables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 
-# --tun=userspace-networking --socks5-server=localhost:1055
-/app/tailscaled --verbose=1 --port 41641 &
+/app/tailscaled --verbose=1 --port 41641 --tun=userspace-networking --socks5-server=localhost:1080 &
 sleep 5
 if [ ! -S /var/run/tailscale/tailscaled.sock ]; then
     echo "tailscaled.sock does not exist. exit!"
